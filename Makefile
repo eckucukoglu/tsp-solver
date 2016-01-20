@@ -24,8 +24,9 @@ Reader.o: Reader.cpp Reader.h
 	$(CC) $(CFLAGS) -c Reader.cpp
 	
 leakcheck: all
-	valgrind --leak-check=yes ./$(BIN)
+	valgrind --leak-check=yes ./$(BIN) < test/input > test/output
 
 clean:
 	rm -f *.o
 	rm -f $(BIN)
+	rm -f test/output

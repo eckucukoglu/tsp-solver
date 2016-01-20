@@ -4,9 +4,12 @@
 /* For UINT_MAX. */
 #include <limits.h>
 #include <stdlib.h>
+#include <iostream>
 
 #define BACKTRACKING 1
 #define BRANCH_AND_BOUND 2
+
+using namespace std;
 
 /*
  * Traveling Salesman Problem

@@ -8,7 +8,7 @@ Tsp::Tsp (unsigned int design_technique, unsigned int** distances,
 }
 
 unsigned int* Tsp::solve() {
-    unsigned int *result = NULL;
+    unsigned int* result = NULL;
     
     if (this->design_technique == BACKTRACKING)
         result = solve_with_backtrack();
@@ -18,12 +18,27 @@ unsigned int* Tsp::solve() {
     return result;
 }
 
-void Tsp::print_solution(unsigned int * solution) {
+void Tsp::print_solution(unsigned int* solution) {
     // TODO
+    
+    cout << this->design_technique << endl;
+    cout << this->number_of_cities << endl;
+    
+    for (unsigned int i = 0; i < this->number_of_cities; ++i) {
+        for (unsigned int j = 0; j < this->number_of_cities; ++j) {
+            cout << i+1 << " " << j+1 << " " << distances[i][j] << endl;
+        }
+    }
 }
 
 Tsp::~Tsp () {
-    // TODO
+    for (unsigned int i = 0; i < this->number_of_cities; ++i) {
+        delete[] this->distances[i];
+        this->distances[i] = 0;
+    }
+
+    delete[] this->distances;
+    this->distances = 0;
 }
 
 unsigned int* Tsp::solve_with_backtrack() {
@@ -46,11 +61,3 @@ unsigned int Tsp::matrix_reduction(unsigned int **matrix,
     
     return 0;                              
 }
-
-
-
-
-
-
-
-

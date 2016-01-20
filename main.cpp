@@ -17,6 +17,8 @@ int main () {
     
     /* Print TSP solution. */
     tsp.print_solution(solution);
+    
+    delete[] solution;
 
     return 0;
 }

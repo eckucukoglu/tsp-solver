@@ -1,7 +1,10 @@
 #ifndef _READER_H_
 #define _READER_H_
 
+/* For UINT_MAX. */
+#include <limits.h>
 #include <stdlib.h>
+#include <iostream>
 
 using namespace std;
 

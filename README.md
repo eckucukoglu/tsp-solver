@@ -19,7 +19,17 @@ TSP solver finds optimal route using Backtracking and Branch & Bound design meth
 * Rest of output define edges in the optimum route.
 
 # How to run
+* Normal usage
 ```
 make
 ./tsp-solver < test/input > test/output
+```
+* Debug mode
+```
+make debug
+./tsp-solver < test/input > test/output
+```
+* Memory leak check (needs valgrind)
+```
+make leakcheck
 ```
