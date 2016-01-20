@@ -1,33 +1,68 @@
 #ifndef _TSP_H_
 #define _TSP_H_
 
-using namespace std;
+/* For UINT_MAX. */
+#include <limits.h>
+#include <stdlib.h>
 
-typedef struct node_struct {
-    unsigned int node_id;
-} Node;
+#define BACKTRACKING 1
+#define BRANCH_AND_BOUND 2
 
-typedef struct edge_struct {
-    unsigned int edge_id;
-    unsigned int weight;
-    Node *node1;
-    Node *node2;
-} Edge;
-
+/*
+ * Traveling Salesman Problem
+ * 
+ * It is a problem in graph theory requiring the most efficient (i.e., least 
+ * total distance) Hamiltonian cycle a salesman can take through each of cities.
+ */
 class Tsp {
 
 private:
+    /* 1: backtracking, 2: branch & bound. */
     unsigned int design_technique;
-    Node *cities;
-    Edge *edges;
-        
-public:
-    Tsp(unsigned int, Node *, Edge *);
-    Edge **solve();
-    Edge **solve_with_backtrack();
-    Edge **solve_with_branch_and_bound();
-    void print(Edge **edges_to_print);
+    /* Number of cities. Note that city ids starts from 1, not 0. */
+    unsigned int number_of_cities;
+    /* Symmetrical distances matrix between cities. */
+    unsigned int **distances;
+    
+    /*
+     * Solves Tsp with backtracking.
+     */
+    unsigned int* solve_with_backtrack();
+    
+    /* 
+     * Solves Tsp with branch and bound.
+     */
+    unsigned int* solve_with_branch_and_bound();
 
+    /*
+     * Matrix reduction.
+     */
+    unsigned int matrix_reduction(unsigned int **matrix, 
+                                  unsigned int dimension, 
+                                  unsigned int *current_path,
+                                  unsigned int path_length);
+    
+public:
+    Tsp(unsigned int design_technique, unsigned int** distances, 
+        unsigned int number_of_cities);
+    
+    /* 
+     * Solves Tsp with with set design technique.
+     * Returns resultant cities in order.
+     */
+    unsigned int* solve();
+    
+    /*
+     * Prints solution to stdout, template is of the form:
+     * 
+     * [total distance covered]
+     * [from city 1] [to city x] [distance 1-x]
+     * [from city x] [to city y] [distance x-y]
+     * ...
+     */
+    void print_solution(unsigned int * solution);
+
+    ~Tsp();
 };
 
 #endif /* not defined _TSP_H_ */
