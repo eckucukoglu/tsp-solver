@@ -44,6 +44,14 @@ private:
                                   unsigned int dimension, 
                                   unsigned int *current_path,
                                   unsigned int path_length);
+                                  
+    unsigned int calculate_bound(unsigned int **matrix, unsigned int dimension);
+    
+    /*
+     * Prints matrix to stdout.
+     */
+    void print_pretty_matrix(char const* desc, unsigned int **matrix, 
+                             unsigned int dimension);
     
 public:
     Tsp(unsigned int design_technique, unsigned int** distances, 

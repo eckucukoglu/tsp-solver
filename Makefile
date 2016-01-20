@@ -10,6 +10,7 @@ BIN = tsp-solver
 
 all: main.o TSP.o Reader.o
 	$(CC) $(CFLAGS) -o $(BIN) main.o TSP.o Reader.o
+	strip $(BIN)
 
 debug: CFLAGS += $(DEBUG)
 debug: all
