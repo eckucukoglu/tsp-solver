@@ -12,7 +12,7 @@
 using namespace std;
 
 /*
- * Traveling Salesman Problem
+ * Travelling Salesman Problem
  * 
  * It is a problem in graph theory requiring the most efficient (i.e., least 
  * total distance) Hamiltonian cycle a salesman can take through each of cities.

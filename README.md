@@ -1,5 +1,5 @@
 # tsp-solver
-Traveling Salesman Problem Solver
+Travelling Salesman Problem Solver
 
 TSP solver finds optimal route using Backtracking and Branch & Bound design methods.
 

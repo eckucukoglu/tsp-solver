@@ -1,3 +1,13 @@
+/*
+ * Travelling Salesman Problem Solver
+ *
+ * TSP solver finds optimal route using 
+ * Backtracking and Branch & Bound design methods.
+ * 
+ * Emre Can Kucukoglu, eckucukoglu@gmail.com
+ * https://github.com/eckucukoglu/tsp-solver
+ */
+
 #include "TSP.h"
 #include "Reader.h"
 
