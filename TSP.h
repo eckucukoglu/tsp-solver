@@ -13,8 +13,8 @@ using namespace std;
 
 /*
  * Travelling Salesman Problem
- * 
- * It is a problem in graph theory requiring the most efficient (i.e., least 
+ *
+ * It is a problem in graph theory requiring the most efficient (i.e., least
  * total distance) Hamiltonian cycle a salesman can take through each of cities.
  */
 class Tsp {
@@ -26,52 +26,57 @@ private:
     unsigned int number_of_cities;
     /* Symmetrical distances matrix between cities. */
     unsigned int **distances;
-    
+    /* */
+    unsigned int optimal_cost;
+    /* */
+    unsigned int* solution;
+
     /*
      * Solves Tsp with backtracking.
      */
-    unsigned int* solve_with_backtrack();
-    
-    /* 
+    void solve_with_backtrack(unsigned int level,
+                              unsigned int* optimal_path,
+                              unsigned int* current_path);
+
+    /*
      * Solves Tsp with branch and bound.
      */
-    unsigned int* solve_with_branch_and_bound();
+    void solve_with_branch_and_bound();
 
     /*
      * Matrix reduction.
      */
-    unsigned int matrix_reduction(unsigned int **matrix, 
-                                  unsigned int dimension, 
+    unsigned int matrix_reduction(unsigned int **matrix,
+                                  unsigned int dimension,
                                   unsigned int *current_path,
                                   unsigned int path_length);
-                                  
+
     unsigned int calculate_bound(unsigned int **matrix, unsigned int dimension);
-    
+
     /*
      * Prints matrix to stdout.
      */
-    void print_pretty_matrix(char const* desc, unsigned int **matrix, 
+    void print_pretty_matrix(char const* desc, unsigned int **matrix,
                              unsigned int dimension);
-    
+
 public:
-    Tsp(unsigned int design_technique, unsigned int** distances, 
+    Tsp(unsigned int design_technique, unsigned int** distances,
         unsigned int number_of_cities);
-    
-    /* 
+
+    /*
      * Solves Tsp with with set design technique.
-     * Returns resultant cities in order.
      */
-    unsigned int* solve();
-    
+    void solve();
+
     /*
      * Prints solution to stdout, template is of the form:
-     * 
+     *
      * [total distance covered]
      * [from city 1] [to city x] [distance 1-x]
      * [from city x] [to city y] [distance x-y]
      * ...
      */
-    void print_solution(unsigned int * solution);
+    void print_solution();
 
     ~Tsp();
 };

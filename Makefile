@@ -20,12 +20,12 @@ main.o: main.cpp TSP.h Reader.h
 
 TSP.o: TSP.cpp TSP.h
 	$(CC) $(CFLAGS) -c TSP.cpp
-	
+
 Reader.o: Reader.cpp Reader.h
 	$(CC) $(CFLAGS) -c Reader.cpp
-	
-leakcheck: all
-	valgrind --leak-check=yes ./$(BIN) < test/input > test/output
+
+leakcheck: debug
+	valgrind --leak-check=full --show-leak-kinds=all ./$(BIN) < test/input > test/output
 
 clean:
 	rm -f *.o
