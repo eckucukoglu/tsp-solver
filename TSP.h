@@ -61,6 +61,12 @@ private:
     void print_pretty_matrix(char const* desc, unsigned int **matrix,
                              unsigned int dimension);
 
+    /*
+     * Sorts array according to comparable array.
+     */
+    void insertion_sort (unsigned int arr[], unsigned int comparable[],
+                         unsigned int length);
+
 public:
     Tsp(unsigned int design_technique, unsigned int** distances,
         unsigned int number_of_cities);

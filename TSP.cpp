@@ -1,7 +1,7 @@
 #include "TSP.h"
 
 Tsp::Tsp (unsigned int design_technique, unsigned int** distances,
-        unsigned int number_of_cities) {
+          unsigned int number_of_cities) {
     this->design_technique = design_technique;
     this->distances = distances;
     this->number_of_cities = number_of_cities;
@@ -39,7 +39,6 @@ void Tsp::print_solution() {
         cout << from + 1 << " " << to + 1 << " " << this->distances[from][to];
         cout << endl;
     }
-
 }
 
 Tsp::~Tsp () {
@@ -66,7 +65,7 @@ void Tsp::solve_with_backtrack(unsigned int level,
 
     if (level == this->number_of_cities) {
         unsigned int cost_of_current_path = 0;
-        // Calculate cost of current path
+
         for (unsigned int i = 0; i < this->number_of_cities; ++i) {
             if (i != 0 && current_path[i] == 0)
                 break;
@@ -126,8 +125,102 @@ void Tsp::solve_with_backtrack(unsigned int level,
 void Tsp::solve_with_branch_and_bound(unsigned int level,
                                       unsigned int* optimal_path,
                                       unsigned int* _current_path) {
-    // TODO
 
+    unsigned int* next_coord = new unsigned int[this->number_of_cities]();
+    unsigned int* next_b = new unsigned int[this->number_of_cities]();
+    for (unsigned int i = 0; i < this->number_of_cities; ++i) {
+        next_coord[i] = UINT_MAX;
+        next_b[i] = UINT_MAX;
+    }
+    next_coord[0] = 0;
+    next_b[0] = 0;
+
+    unsigned int* current_path = new unsigned int[this->number_of_cities]();
+    for (unsigned int i = 0; i < this->number_of_cities; ++i) {
+        current_path[i] = _current_path[i];
+    }
+
+    if (level == this->number_of_cities) {
+        unsigned int cost_of_current_path = 0;
+
+        for (unsigned int i = 0; i < this->number_of_cities; ++i) {
+            if (i != 0 && current_path[i] == 0)
+                break;
+
+            unsigned int from = current_path[i];
+            unsigned int to;
+            if (i == (this->number_of_cities - 1))
+                to = current_path[0];
+            else
+                to = current_path[i+1];
+
+            cost_of_current_path += this->distances[from][to];
+        }
+
+        if (cost_of_current_path < this->optimal_cost) {
+            this->optimal_cost = cost_of_current_path;
+
+            for (unsigned int i = 0; i < this->number_of_cities; ++i) {
+                optimal_path[i] = current_path[i];
+            }
+        }
+
+    } else {
+        unsigned int count = 0;
+        for (unsigned int i = 1; i < this->number_of_cities; ++i) {
+            current_path[level] = i;
+            bool isDistinct = true;
+
+            for (unsigned int j = 0; j < level; ++j) {
+                if (current_path[j] == current_path[level]) {
+                    isDistinct = false;
+                    break;
+                }
+            }
+
+            if (isDistinct) {
+                count++;
+                next_coord[count] = current_path[level];
+
+                unsigned int path_length = 1;
+                for (unsigned int i = 1; i < this->number_of_cities; ++i) {
+                    if (current_path[i] == 0)
+                        break;
+                    path_length++;
+                }
+
+                next_b[count] = matrix_reduction(this->distances,
+                                                 this->number_of_cities,
+                                                 current_path,
+                                                 path_length);
+            }
+        }
+
+        insertion_sort(next_coord, next_b, this->number_of_cities);
+        count = 1;
+
+        while ((count <= (this->number_of_cities - level)) &&
+               (next_b[count] < this->optimal_cost)) {
+            current_path[level] = next_coord[count];
+            bool isDistinct = true;
+
+            for (unsigned int j = 0; j < level; ++j) {
+                if (current_path[j] == current_path[level]) {
+                    isDistinct = false;
+                    break;
+                }
+            }
+
+            if (isDistinct) {
+                solve_with_branch_and_bound(level+1, optimal_path, current_path);
+            }
+            count++;
+        }
+    }
+
+    delete[] next_coord;
+    delete[] next_b;
+    delete[] current_path;
 }
 
 unsigned int Tsp::matrix_reduction(unsigned int **distances,
@@ -244,5 +337,24 @@ void Tsp::print_pretty_matrix(char const* desc, unsigned int **matrix,
             cout << matrix[i][j] << "\t";
         }
         cout << endl;
+    }
+}
+
+void Tsp::insertion_sort (unsigned int arr[], unsigned int comparable[],
+                          unsigned int length) {
+    int j, temp1, temp2;
+
+    for (unsigned int i = 0; i < length; i++){
+        j = i;
+
+        while (j > 0 && comparable[j] < comparable[j-1]) {
+            temp1 = comparable[j];
+            temp2 = arr[j];
+            comparable[j] = comparable[j-1];
+            arr[j] = arr[j-1];
+            comparable[j-1] = temp1;
+            arr[j-1] = temp2;
+            j--;
+        }
     }
 }

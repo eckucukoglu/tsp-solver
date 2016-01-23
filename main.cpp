@@ -18,7 +18,7 @@ int main () {
     unsigned int design_technique = InputReader::get_design_technique();
     unsigned int** distances = InputReader::get_distances();
     unsigned int number_of_cities = InputReader::get_number_of_cities();
-
+    
     if ((design_technique == 0) || (distances == NULL) ||
         (number_of_cities == 0)) {
       // unexpected read results
