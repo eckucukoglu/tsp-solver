@@ -16,7 +16,7 @@ void Tsp::solve() {
     if (this->design_technique == BACKTRACKING)
         solve_with_backtrack(level, optimal_path, current_path);
     else if (this->design_technique == BRANCH_AND_BOUND)
-        solve_with_branch_and_bound();
+        solve_with_branch_and_bound(level, optimal_path, current_path);
 
 
     delete[] current_path;
@@ -25,7 +25,6 @@ void Tsp::solve() {
 
 void Tsp::print_solution() {
 
-    // print_pretty_matrix("Distances", this->distances, this->number_of_cities);
     cout << this->optimal_cost << endl;
 
     for (unsigned int i = 0; i < this->number_of_cities; ++i) {
@@ -37,7 +36,8 @@ void Tsp::print_solution() {
         else
             to = this->solution[i + 1];
 
-        cout << from+1 << " " << to+1 << " " << this->distances[from][to] << endl;
+        cout << from + 1 << " " << to + 1 << " " << this->distances[from][to];
+        cout << endl;
     }
 
 }
@@ -59,27 +59,12 @@ void Tsp::solve_with_backtrack(unsigned int level,
                                unsigned int* optimal_path,
                                unsigned int* _current_path) {
 
-    cout << endl << "*** BACKTRACK INFO ***" << endl;
-    cout << "Solving for level: " << level << endl;
-    cout << "optimal cost: " << this->optimal_cost << endl;
-    cout << "optimal path: ";
-    for (unsigned int i = 0; i < this->number_of_cities; ++i) {
-        cout << optimal_path[i] << " ";
-    }
-    cout << endl;
-    cout << "current path: ";
-    for (unsigned int i = 0; i < this->number_of_cities; ++i) {
-        cout << _current_path[i] << " ";
-    }
-    cout << endl << endl;
-
     unsigned int* current_path = new unsigned int[this->number_of_cities]();
     for (unsigned int i = 0; i < this->number_of_cities; ++i) {
         current_path[i] = _current_path[i];
     }
 
     if (level == this->number_of_cities) {
-        cout << "Hamiltonian" << endl;
         unsigned int cost_of_current_path = 0;
         // Calculate cost of current path
         for (unsigned int i = 0; i < this->number_of_cities; ++i) {
@@ -93,13 +78,11 @@ void Tsp::solve_with_backtrack(unsigned int level,
             else
                 to = current_path[i+1];
 
-            cout << "from " << from << " to " << to << ": " << this->distances[from][to] << endl;
             cost_of_current_path += this->distances[from][to];
         }
 
         if (cost_of_current_path < this->optimal_cost) {
             this->optimal_cost = cost_of_current_path;
-            cout << "optimal cost: " << this->optimal_cost << endl;
 
             for (unsigned int i = 0; i < this->number_of_cities; ++i) {
                 optimal_path[i] = current_path[i];
@@ -123,7 +106,6 @@ void Tsp::solve_with_backtrack(unsigned int level,
         while ((bound < this->optimal_cost) &&
                (current_path[level] < this->number_of_cities)) {
 
-            cout << "inside while " << level << " " << current_path[level] << endl;
             bool isDistinct = true;
 
             for (unsigned int i = 0; i < level; ++i) {
@@ -132,19 +114,18 @@ void Tsp::solve_with_backtrack(unsigned int level,
                     break;
                 }
             }
-            cout << isDistinct << endl;
             if (isDistinct) {
                 solve_with_backtrack(level + 1, optimal_path, current_path);
-                cout << "returned backtrack" << endl;
             }
             current_path[level] = current_path[level] + 1;
-            cout << "end of while. level: " << level << " path[level]: " << current_path[level] << endl;
         }
     }
     delete[] current_path;
 }
 
-void Tsp::solve_with_branch_and_bound() {
+void Tsp::solve_with_branch_and_bound(unsigned int level,
+                                      unsigned int* optimal_path,
+                                      unsigned int* _current_path) {
     // TODO
 
 }
@@ -200,8 +181,7 @@ unsigned int Tsp::matrix_reduction(unsigned int **distances,
     matrix = 0;
 
 #ifdef DEBUG
-    cout << "Result: " << result << endl;
-    //cout << "Path distance: " << path_distance << endl;
+    cout << "Bound result: " << result << endl;
 #endif /* DEBUG */
 
     return result;
@@ -228,11 +208,6 @@ unsigned int Tsp::calculate_bound(unsigned int **matrix, unsigned int dimension)
         if (local_min != UINT_MAX)
             result += local_min;
     }
-
-#ifdef DEBUG
-    //cout << "Bound intermediate result: " << result << endl;
-    //print_pretty_matrix("After row/before column reduction", matrix, dimension);
-#endif /* DEBUG */
 
     for (unsigned int j = 0; j < dimension; ++j) {
         local_min = matrix[0][j];

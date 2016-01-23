@@ -36,12 +36,14 @@ private:
      */
     void solve_with_backtrack(unsigned int level,
                               unsigned int* optimal_path,
-                              unsigned int* current_path);
+                              unsigned int* _current_path);
 
     /*
      * Solves Tsp with branch and bound.
      */
-    void solve_with_branch_and_bound();
+    void solve_with_branch_and_bound(unsigned int level,
+                                     unsigned int* optimal_path,
+                                     unsigned int* _current_path);
 
     /*
      * Matrix reduction.
