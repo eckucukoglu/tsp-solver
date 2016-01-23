@@ -141,7 +141,7 @@ void Tsp::solve_with_backtrack(unsigned int level,
             cout << "end of while. level: " << level << " path[level]: " << current_path[level] << endl;
         }
     }
-
+    delete[] current_path;
 }
 
 void Tsp::solve_with_branch_and_bound() {
